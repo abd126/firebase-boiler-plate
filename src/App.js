@@ -2,7 +2,8 @@ import './App.css';
 import Router from './Config/Router';
 
 
-function App() {
+function App(props) {
+  console.log(props)
   return (
     <div className="App">
      <Router />

@@ -4,7 +4,7 @@ import { auth, db } from '../../Config/Firebase'
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import './style.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
@@ -53,7 +53,7 @@ const Signup = () => {
     }
 
     return (
-        <div className='form-component'>
+        <div className='form-component d-flex'>
 
             <form onSubmit={signUpHandler} className="container mt-5">
             <h1>Signup</h1>
@@ -93,6 +93,7 @@ const Signup = () => {
                 
                 <button className='btn btn-info w-75 my-3'>Submit</button>
             }
+            <div>Already Account <Link to='/'>Login</Link></div>
             </form>
 
 
