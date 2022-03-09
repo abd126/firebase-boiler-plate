@@ -25,24 +25,24 @@ const Signup = () => {
             .then(async (result) => {
                 
                 const UID = result.user.uid
-                // const dbRef = collection(db,"Users")
-                // let user =[]
-                // try {
-                    //     const addUser = addDoc(dbRef,{
-                        //         Name : name,
-                        //         id:result.user.uid
-                        //     })
-                        // } catch (error) {
-                            //     console.log(error)
-                            // }
-                            const docRef = await doc(db, "Users", UID)
-                            const userData = {
-                                name, 
-                                email,
-                                number,
-                                UID
+                const dbRef = collection(db,"Users")
+                let user =[]
+                try {
+                        const addUser = addDoc(dbRef,{
+                                Name : name,
+                                id:result.user.uid
+                            })
+                        } catch (error) {
+                                console.log(error)
                             }
-                            setDoc(docRef, userData)
+                            // const docRef = await doc(db, "Users", UID)
+                            // const userData = {
+                            //     name, 
+                            //     email,
+                            //     number,
+                            //     UID
+                            // }
+                            // setDoc(docRef, userData)
                             isLoading(false)
                             navigate('/')
                             

@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, db } from '../../Config/Firebase'
 import Loader from '../Loader'
@@ -8,7 +8,7 @@ const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, isLoading] = useState(false)
-    const [currentUser, setCurrentUser] = useState({})
+    const user = localStorage.getItem("currentUser")
 
     const navigate = useNavigate()
 
@@ -19,16 +19,20 @@ const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 const user = result
-                setCurrentUser(user)
                 isLoading(false)
-                navigate("/dashboard")
+                navigate("dashboard")
+                localStorage.setItem("currentUser", result.user.uid)
             })
             .catch((error) => {
                 console.log(error)
-
+                isLoading(false)
             })
     }
-
+    useEffect(()=>{
+        if(user){
+            navigate("/dashboard")
+        }
+    },[])
 
     return (
         <div className='form-component d-flex'>
@@ -57,7 +61,7 @@ const Login = () => {
                     <Loader />
                     :
 
-                    <button className='btn btn-info w-75 my-3' setUser={currentUser} >Submit</button>
+                    <button className='btn btn-info w-75 my-3' >Submit</button>
                 }
                 <div>
                     Don't Register<Link to='/signup'> Signup</Link>
