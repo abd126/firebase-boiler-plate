@@ -5,6 +5,8 @@ import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import './style.css'
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUpAction } from '../../Store/Actions/authActions';
 
 
 const Signup = () => {
@@ -15,40 +17,53 @@ const Signup = () => {
     const [password, setPassword] = useState("")
     const [loading , isLoading] = useState(false)
  
+
+    const {setLoading , setError , } = useSelector( (state)=>state.usersReducer )
+    console.log(setLoading ,  setError , "Reducer")
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const signUpHandler = async (e) => {
         e.preventDefault();
-        isLoading(true)
-        // console.log(name, email, password)
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(async (result) => {
+        // isLoading(true)
+        // // console.log(name, email, password)
+        // createUserWithEmailAndPassword(auth, email, password)
+        //     .then(async (result) => {
                 
-                const UID = result.user.uid
-                const dbRef = collection(db,"Users")
-                let user =[]
-                try {
-                        const addUser = addDoc(dbRef,{
-                                Name : name,
-                                id:result.user.uid
-                            })
-                        } catch (error) {
-                                console.log(error)
-                            }
-                            // const docRef = await doc(db, "Users", UID)
-                            // const userData = {
-                            //     name, 
-                            //     email,
-                            //     number,
-                            //     UID
-                            // }
-                            // setDoc(docRef, userData)
-                            isLoading(false)
-                            navigate('/')
+        //         const UID = result.user.uid
+        //         const dbRef = collection(db,"Users")
+        //         let user =[]
+        //         try {
+        //                 const addUser = addDoc(dbRef,{
+        //                         Name : name,
+        //                         id:result.user.uid
+        //                     })
+        //                 } catch (error) {
+        //                         console.log(error)
+        //                     }
+        //                     // const docRef = await doc(db, "Users", UID)
+        //                     // const userData = {
+        //                     //     name, 
+        //                     //     email,
+        //                     //     number,
+        //                     //     UID
+        //                     // }
+        //                     // setDoc(docRef, userData)
+        //                     isLoading(false)
+        //                     navigate('/')
                             
-            }).catch((err) => {
-                console.log(err)
-            })
+        //     }).catch((err) => {
+        //         console.log(err)
+        //     })
+       await dispatch(
+            
+        signUpAction({
+            email,
+            name,
+            password
+        })
+        )
+       await navigate("/")
 
     }
 
@@ -87,7 +102,7 @@ const Signup = () => {
                     onChange={(e) => setPassword(e.target.value)} />
 
 
-                { loading ? 
+                { setLoading ? 
                 <Loader />
                 :
                 

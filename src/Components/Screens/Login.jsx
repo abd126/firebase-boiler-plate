@@ -1,38 +1,42 @@
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { auth, db } from '../../Config/Firebase'
+import { loginAction } from '../../Store/Actions/authActions'
 import Loader from '../Loader'
 const Login = () => {
 
+    //Variables
+    const distpatch = useDispatch()
+    const navigate = useNavigate()
+    const user = localStorage.getItem("currentUser")
+    const {setLoading , setError} = useSelector(state => state.usersReducer)
+    console.log(setLoading,setError)
+    
+    
+    //States
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [loading, isLoading] = useState(false)
-    const user = localStorage.getItem("currentUser")
-
-    const navigate = useNavigate()
+    const [refresh , setRefresh] = useState(false)
 
 
+    //Functions
     const LoginHandler = (e) => {
         e.preventDefault();
-        isLoading(true)
-        signInWithEmailAndPassword(auth, email, password)
-            .then((result) => {
-                const user = result
-                isLoading(false)
-                navigate("dashboard")
-                localStorage.setItem("currentUser", result.user.uid)
-            })
-            .catch((error) => {
-                console.log(error)
-                isLoading(false)
-            })
+        
+        distpatch(
+            loginAction({ email, password }),
+        )
+        navigate("/dashboard")
+        setRefresh(!refresh)
     }
-    useEffect(()=>{
-        if(user){
+
+    //UseEffects
+    useEffect(() => {
+        if (user) {
+            // setRefresh(!refresh)
             navigate("/dashboard")
         }
-    },[])
+    }, [refresh])
 
     return (
         <div className='form-component d-flex'>
@@ -57,7 +61,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)} />
 
 
-                {loading ?
+                {setLoading ?
                     <Loader />
                     :
 

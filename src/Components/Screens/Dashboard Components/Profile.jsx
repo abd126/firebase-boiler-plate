@@ -1,11 +1,13 @@
 import { collection, getDocs } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { db } from '../../../Config/Firebase'
 
 const Profile = () => {
   // Variables
   const user = localStorage.getItem("currentUser")
   const dbRef = collection(db, "Users")
+  const fbUser = useSelector(state=>state.usersReducer)
 
 
   //States
@@ -19,10 +21,10 @@ const Profile = () => {
     getData.forEach((user) => {
       if(user === user.data().userUid)
       setCurrentUser(user.data())
-      console.log(user.data())
+      // console.log(user.data())
     })
   }, [])
-  console.log(currentUser , "user Data")
+  // console.log(fbUser , "user Data")
 
   return (
     <div>
